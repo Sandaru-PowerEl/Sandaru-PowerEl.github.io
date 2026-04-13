@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Sandaru</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">S.D.</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="https://github.com/YOUR_USERNAME" target="_blank" class="nav-gh">GitHub ↗</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">// about_me</span>
+      <h1>About</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container about-layout">
+
+      <div class="about-main">
+        <p class="about-lead">
+          I'm an Electrical Engineering undergraduate at the University of Moratuwa,
+          specialising in power electronics and control systems.
+        </p>
+        <p>
+          This portfolio documents my technical work — design processes, full mathematical
+          derivations, simulation results, and source code. I believe that engineering
+          insight lives in the derivation, not just the simulation output.
+        </p>
+        <p>
+          Alongside my EE core, I'm building software skills in Java and Spring Boot,
+          working toward projects that bridge embedded firmware and backend systems.
+        </p>
+
+        <h2>Education</h2>
+        <div class="edu-item">
+          <span class="edu-school">University of Moratuwa</span>
+          <span class="edu-degree">B.Sc. Engineering (Electrical) — In Progress</span>
+          <span class="edu-detail">Specialisation: Power Electronics &amp; Energy Systems</span>
+        </div>
+
+        <h2>Technical Focus</h2>
+        <div class="focus-grid">
+          <div class="focus-item">
+            <h4>Power Converters</h4>
+            <p>Buck, boost, flyback, full-bridge topologies. CCM/DCM analysis. Magnetics design.</p>
+          </div>
+          <div class="focus-item">
+            <h4>Control Theory</h4>
+            <p>State-space averaging, small-signal models, PI/PID design, digital implementation via Tustin transform.</p>
+          </div>
+          <div class="focus-item">
+            <h4>Simulation Tools</h4>
+            <p>QSpice for circuit-level simulation, MATLAB/Simulink for system-level modelling and control design.</p>
+          </div>
+          <div class="focus-item">
+            <h4>Software Development</h4>
+            <p>Java, Spring Boot, REST APIs, JPA. Interested in embedded firmware and IoT system architecture.</p>
+          </div>
+        </div>
+
+        <h2>Contact</h2>
+        <p>
+          Open to research collaborations, internship opportunities, and interesting conversations
+          about power electronics.
+        </p>
+        <div class="contact-row">
+          <a href="mailto:YOUR_EMAIL" class="btn-primary">Email Me</a>
+          <a href="https://github.com/YOUR_USERNAME" class="btn-ghost" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+
+      <aside class="about-sidebar">
+        <div class="sidebar-card">
+          <h4>Tools & Technologies</h4>
+          <ul class="tool-list">
+            <li><span class="tool-cat">Simulation</span>QSpice, MATLAB, Simulink</li>
+            <li><span class="tool-cat">Languages</span>MATLAB, Java, Python</li>
+            <li><span class="tool-cat">Web</span>Spring Boot, HTML/CSS/JS</li>
+            <li><span class="tool-cat">Writing</span>LaTeX, Markdown</li>
+            <li><span class="tool-cat">Version Control</span>Git, GitHub</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Sandaru Dissanayake</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-uni">University of Moratuwa · EE</span>
+        <div class="footer-links">
+          <a href="https://github.com/YOUR_USERNAME" target="_blank">GitHub</a>
+          <a href="mailto:YOUR_EMAIL">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.querySelector('.nav-links').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

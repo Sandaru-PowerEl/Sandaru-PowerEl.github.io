@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Sandaru</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">S.D.</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="https://github.com/YOUR_USERNAME" target="_blank" class="nav-gh">GitHub ↗</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">// all_projects</span>
+      <h1>Projects</h1>
+      <p>Technical work with full derivations, simulation results, and source code.</p>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="container">
+      <button class="filter-btn active" data-tag="all">All</button>
+      <button class="filter-btn" data-tag="power-electronics">Power Electronics</button>
+      <button class="filter-btn" data-tag="control-systems">Control Systems</button>
+      <button class="filter-btn" data-tag="simulation">Simulation</button>
+      <button class="filter-btn" data-tag="software">Software</button>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="project-grid" id="projectGrid"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Sandaru Dissanayake</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-uni">University of Moratuwa · EE</span>
+        <div class="footer-links">
+          <a href="https://github.com/YOUR_USERNAME" target="_blank">GitHub</a>
+          <a href="mailto:YOUR_EMAIL">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="projects.js"></script>
+  <script>
+    let activeTag = 'all';
+
+    function renderAll() {
+      const list = activeTag === 'all'
+        ? PROJECTS
+        : PROJECTS.filter(p => p.tags.includes(activeTag));
+      document.getElementById('projectGrid').innerHTML = list.map(renderCard).join('');
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTag = btn.dataset.tag;
+        renderAll();
+        if (window.MathJax) MathJax.typesetPromise();
+      });
+    });
+
+    renderAll();
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.querySelector('.nav-links').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
