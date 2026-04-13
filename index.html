@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sandaru | Power Electronics Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        packages: {'[+]': ['ams']}
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+      startup: { ready() { MathJax.startup.defaultReady(); } }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <!-- ─── NAVIGATION ─── -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">S.I.</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="https://github.com/YOUR_USERNAME" target="_blank" class="nav-gh">GitHub ↗</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <header class="hero">
+    <div class="hero-bg">
+      <svg class="hero-grid" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.18"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+        <!-- Schematic-style decorative lines -->
+        <g opacity="0.12" stroke="currentColor" fill="none" stroke-width="1.2">
+          <polyline points="100,300 160,300 180,260 220,340 260,260 300,340 320,300 420,300"/>
+          <circle cx="420" cy="300" r="4" fill="currentColor"/>
+          <line x1="420" y1="300" x2="500" y2="300"/>
+          <rect x="500" y="285" width="60" height="30" />
+          <line x1="560" y1="300" x2="640" y2="300"/>
+          <polyline points="640,270 640,330"/>
+          <polyline points="660,280 660,320"/>
+          <line x1="660" y1="300" x2="750" y2="300"/>
+        </g>
+        <!-- Second schematic line lower -->
+        <g opacity="0.08" stroke="currentColor" fill="none" stroke-width="1">
+          <polyline points="700,420 760,420 780,390 810,450 840,390 870,450 890,420 950,420"/>
+          <line x1="950" y1="380" x2="950" y2="460"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">EE Undergraduate · University of Moratuwa</div>
+      <h1 class="hero-title">Power Electronics<br/><span class="hero-accent">& Embedded Systems</span></h1>
+      <p class="hero-sub">
+        Documenting converter design, control theory, and simulation — from first principles to working hardware.
+        Full mathematical derivations included.
+      </p>
+      <div class="hero-actions">
+        <a href="projects.html" class="btn-primary">View Projects</a>
+        <a href="about.html" class="btn-ghost">About Me</a>
+      </div>
+      <div class="hero-tags">
+        <span>Buck / Boost Converters</span>
+        <span>PI/PID Control</span>
+        <span>State-Space Analysis</span>
+        <span>MATLAB · QSpice · Simulink</span>
+        <span>Spring Boot</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── FEATURED PROJECTS ─── -->
+  <section class="section featured">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">// featured_projects</span>
+        <h2>Selected Work</h2>
+      </div>
+
+      <div class="project-grid" id="featuredGrid">
+        <!-- Populated by projects.js -->
+      </div>
+
+      <div class="section-footer">
+        <a href="projects.html" class="btn-outline">View All Projects →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SKILLS STRIP ─── -->
+  <section class="skills-strip">
+    <div class="container">
+      <div class="skills-grid">
+        <div class="skill-item">
+          <span class="skill-icon">⚡</span>
+          <span class="skill-name">Power Electronics</span>
+          <span class="skill-detail">DC-DC, Inverters, PFC</span>
+        </div>
+        <div class="skill-item">
+          <span class="skill-icon">∿</span>
+          <span class="skill-name">Control Systems</span>
+          <span class="skill-detail">PI/PID, State-Space, Root Locus</span>
+        </div>
+        <div class="skill-item">
+          <span class="skill-icon">▦</span>
+          <span class="skill-name">Simulation</span>
+          <span class="skill-detail">MATLAB, QSpice, Simulink</span>
+        </div>
+        <div class="skill-item">
+          <span class="skill-icon">&lt;/&gt;</span>
+          <span class="skill-name">Software</span>
+          <span class="skill-detail">Java, Spring Boot, REST APIs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Sandaru Imesh</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-uni">University of Moratuwa · EE</span>
+        <div class="footer-links">
+          <a href="https://github.com/YOUR_USERNAME" target="_blank">GitHub</a>
+          <a href="mailto:YOUR_EMAIL">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="projects.js"></script>
+  <script>
+    // Render featured projects (first 3 with featured:true)
+    const featured = PROJECTS.filter(p => p.featured).slice(0, 3);
+    document.getElementById('featuredGrid').innerHTML = featured.map(renderCard).join('');
+
+    // Mobile nav toggle
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.querySelector('.nav-links').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
