@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AC Thermal Control Analysis | Sandaru Imesh</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'],['\\(','\\)']],
+        displayMath: [['$$','$$'],['\\[','\\]']],
+        packages: {'[+]': ['ams']}
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">S.I.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html" class="active">Projects</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="https://github.com/Sandaru-PowerEl" target="_blank" class="nav-gh">GitHub ↗</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<div class="proj-header">
+  <div class="container">
+    <a href="../projects.html" class="back-link">← Back to Projects</a>
+    <div class="proj-meta-top">
+      <span class="proj-category">Control Systems & Simulation</span>
+      <span class="proj-date">2026</span>
+    </div>
+    <h1 class="proj-title">Air-Conditioning Thermal Control:<br/>PI vs. ON/OFF Analysis</h1>
+    <p class="proj-subtitle">
+      First-principles thermal modelling of an HVAC system, featuring Euler-method simulation,
+      control topology comparison, and energy efficiency analysis in MATLAB.
+    </p>
+    <div class="proj-tags-row">
+      <span class="tag">MATLAB</span>
+      <span class="tag">PI Control</span>
+      <span class="tag">Thermal Dynamics</span>
+      <span class="tag">Euler Method</span>
+    </div>
+    <div class="proj-links">
+      <a href="https://github.com/Sandaru-PowerEl/ac-thermal-control" class="btn-primary" target="_blank">View on GitHub ↗</a>
+      <a href="#thermal-model" class="btn-ghost">Jump to Thermal Model</a>
+    </div>
+  </div>
+</div>
+
+<div class="proj-media">
+  <div class="container">
+    <img src="../assets/projects/ac-thermal-control/cover.png"
+         alt="MATLAB Simulation showing temperature settling times"
+         class="proj-cover-img" />
+  </div>
+</div>
+
+<article class="proj-content">
+  <div class="container proj-layout">
+
+    <div class="proj-body">
+
+      <section class="proj-section">
+        <h2>Overview</h2>
+        <p>
+          Standard residential air conditioning units often rely on simple bang-bang (ON/OFF) control, which leads to temperature oscillations and electrical stress from frequent compressor cycling. This project mathematically models the thermal dynamics of a standard room and simulates the performance difference between a traditional ON/OFF controller and a continuous Proportional-Integral (PI) controller.
+        </p>
+      </section>
+
+      <section class="proj-section" id="thermal-model">
+        <h2>1. Thermal System Mathematical Model</h2>
+        <p>
+          The room is modeled as a lumped-parameter thermal system. The rate of change of the room temperature ($T_{room}$) depends on the ambient outdoor temperature ($T_{amb}$), the equivalent thermal resistance of the walls ($R_{th}$), the thermal capacitance of the air mass ($C_{th}$), and the cooling power injected by the AC unit ($Q_{ac}$).
+        </p>
+
+        <p>By applying energy conservation, the continuous-time differential equation is:</p>
+
+        $$\frac{dT_{room}}{dt} = \frac{1}{R_{th} C_{th}} (T_{amb} - T_{room}) - \frac{1}{C_{th}} Q_{ac}(t)$$
+
+        <h3>Numerical Simulation (Euler Method)</h3>
+        <p>
+          To simulate this in MATLAB without relying on high-level blocksets, the differential equation was discretized using the first-order forward Euler method with a fixed time step ($\Delta t$):
+        </p>
+
+        $$T_{room}[k+1] = T_{room}[k] + \Delta t \left( \frac{T_{amb} - T_{room}[k]}{R_{th} C_{th}} - \frac{Q_{ac}[k]}{C_{th}} \right)$$
+      </section>
+
+      <section class="proj-section">
+        <h2>2. Control Topologies Evaluated</h2>
+
+        <h3>Hysteresis (ON/OFF) Control</h3>
+        <p>
+          The baseline system utilizes an ON/OFF controller with a predefined deadband ($\pm 1^\circ\text{C}$ around the setpoint) to prevent rapid relay chattering. While simple to implement, this inherently causes a continuous steady-state ripple in room temperature.
+        </p>
+
+        <h3>PI Continuous Control</h3>
+        <p>
+          For the advanced topology, a PI controller adjusts the cooling effort continuously, mimicking an inverter-driven compressor. The cooling effort $Q_{ac}$ is calculated based on the error $e(t) = T_{set} - T_{room}(t)$:
+        </p>
+
+        $$Q_{ac}(t) = K_p \cdot e(t) + K_i \int_{0}^{t} e(\tau) d\tau$$
+
+        <p>
+          The discrete-time implementation in the MATLAB script uses an accumulator for the integral term, with anti-windup logic applied to represent the physical maximum cooling capacity of the compressor.
+        </p>
+      </section>
+
+      <section class="proj-section">
+        <h2>Simulation Results & Energy Analysis</h2>
+        <p>
+          The MATLAB simulations revealed significant differences in both comfort (temperature tracking) and energy consumption. The PI controller achieved zero steady-state error with no overshoot, eliminating the thermal ripple entirely.
+        </p>
+
+        <figure class="proj-figure">
+          <img src="../assets/projects/ac-thermal-control/temp-comparison.png"
+               alt="MATLAB Plot of ON/OFF vs PI Temperature Response" />
+          <figcaption>Fig. 1 — Temperature response comparison. Note the distinct 2°C ripple of the ON/OFF controller versus the smooth asymptotic settling of the PI controller.</figcaption>
+        </figure>
+
+        <figure class="proj-figure">
+          <img src="../assets/projects/ac-thermal-control/energy-plot.png"
+               alt="Cumulative Energy Consumption Graph" />
+          <figcaption>Fig. 2 — Cumulative energy consumption over a 24-hour simulation profile, demonstrating the efficiency gains of avoiding hard compressor starts.</figcaption>
+        </figure>
+      </section>
+
+      <section class="proj-section">
+        <h2>Key Results</h2>
+        <div class="results-grid">
+          <div class="result-card">
+            <span class="result-val">0°C</span>
+            <span class="result-label">PI Steady-State Ripple</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">Zero</span>
+            <span class="result-label">PI Overshoot</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">Euler</span>
+            <span class="result-label">Numerical Method</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">1st Order</span>
+            <span class="result-label">Thermal Dynamics</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="proj-section">
+        <h2>Files & Code</h2>
+        <div class="file-list">
+          <a href="https://github.com/Sandaru-PowerEl/ac-thermal-control" class="file-item" target="_blank">
+            <span class="file-icon">📄</span>
+            <span class="file-name">thermal_sim.m</span>
+            <span class="file-desc">Main MATLAB script containing the Euler loop and plot generation</span>
+          </a>
+          <a href="https://github.com/Sandaru-PowerEl/ac-thermal-control" class="file-item" target="_blank">
+            <span class="file-icon">📑</span>
+            <span class="file-name">financial_viability.pdf</span>
+            <span class="file-desc">Analysis of energy savings vs. inverter compressor cost</span>
+          </a>
+        </div>
+      </section>
+
+    </div><aside class="proj-sidebar">
+    <div class="sidebar-card">
+      <h4>Project Info</h4>
+      <dl>
+        <dt>Category</dt><dd>Control Systems</dd>
+        <dt>Tools</dt><dd>MATLAB</dd>
+        <dt>Status</dt><dd><span class="badge-complete">Complete</span></dd>
+        <dt>Year</dt><dd>2026</dd>
+      </dl>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Topics Covered</h4>
+      <ul class="topic-list">
+        <li>Lumped-Parameter Modelling</li>
+        <li>Differential Equations</li>
+        <li>Euler Numerical Integration</li>
+        <li>Bang-Bang Control</li>
+        <li>PI Loop Tuning</li>
+        <li>Energy Efficiency Analysis</li>
+      </ul>
+    </div>
+
+    <a href="https://github.com/Sandaru-PowerEl/ac-thermal-control" class="btn-primary block-btn" target="_blank">View on GitHub ↗</a>
+  </aside>
+
+  </div></article>
+
+<div class="next-project">
+  <div class="container">
+    <span class="section-label">// next</span>
+    <a href="labms.html" class="next-link">
+      Laboratory Management System (Java Spring Boot) →
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-name">Sandaru Imesh</span>
+      <span class="footer-sep">·</span>
+      <span class="footer-uni">University of Moratuwa · EE</span>
+      <div class="footer-links">
+        <a href="https://github.com/Sandaru-PowerEl" target="_blank">GitHub</a>
+        <a href="mailto:sandarukaviraj31@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

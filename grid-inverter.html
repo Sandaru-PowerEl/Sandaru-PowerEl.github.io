@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grid-Connected Inverter | Sandaru Imesh</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'],['\\(','\\)']],
+        displayMath: [['$$','$$'],['\\[','\\]']],
+        packages: {'[+]': ['ams']}
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">S.I.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html" class="active">Projects</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="https://github.com/Sandaru-PowerEl" target="_blank" class="nav-gh">GitHub ↗</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<div class="proj-header">
+  <div class="container">
+    <a href="../projects.html" class="back-link">← Back to Projects</a>
+    <div class="proj-meta-top">
+      <span class="proj-category">Power Electronics & Simulation</span>
+      <span class="proj-date">2026</span>
+    </div>
+    <h1 class="proj-title">Grid-Connected Fast Battery<br/>Charging System</h1>
+    <p class="proj-subtitle">
+      Design and simulation of a three-phase inverter featuring LCL filter attenuation,
+      dq-frame cascade control, and grid synchronization in MATLAB/Simulink.
+    </p>
+    <div class="proj-tags-row">
+      <span class="tag">Simulink</span>
+      <span class="tag">LCL Filter</span>
+      <span class="tag">Cascade Control</span>
+      <span class="tag">Grid Sync (PLL)</span>
+    </div>
+    <div class="proj-links">
+      <a href="https://github.com/Sandaru-PowerEl/grid-inverter" class="btn-primary" target="_blank">View on GitHub ↗</a>
+      <a href="#filter-analysis" class="btn-ghost">Jump to LCL Analysis</a>
+    </div>
+  </div>
+</div>
+
+<div class="proj-media">
+  <div class="container">
+    <img src="../assets/projects/grid-inverter/cover.png"
+         alt="Grid-connected inverter Simulink model"
+         class="proj-cover-img" />
+  </div>
+</div>
+
+<article class="proj-content">
+  <div class="container proj-layout">
+
+    <div class="proj-body">
+
+      <section class="proj-section">
+        <h2>Overview</h2>
+        <p>
+          As electric vehicle (EV) adoption accelerates, the demand for fast, efficient, and grid-friendly charging infrastructure is critical. This project models a three-phase grid-connected inverter designed for fast battery charging. The system ensures stable bi-directional power flow, maintains grid stability through precise phase-locked loop (PLL) synchronization, and utilizes an LCL filter to severely attenuate high-frequency switching harmonics.
+        </p>
+      </section>
+
+      <section class="proj-section">
+        <h2>Control Architecture</h2>
+        <p>
+          The control strategy relies on a Synchronous Reference Frame (dq0) transformation to convert three-phase AC grid currents and voltages into DC quantities. This allows for the implementation of standard PI controllers in a cascade structure.
+        </p>
+        <p>
+          The outer voltage loop regulates the DC bus voltage, generating the active current reference ($i_d^*$), while the reactive current reference ($i_q^*$) is set to zero to maintain unity power factor. The inner current loop then calculates the required inverter voltage vectors:
+        </p>
+
+        $$v_d^* = v_{d,grid} + \omega L i_q + k_p(i_d^* - i_d) + k_i \int(i_d^* - i_d)dt$$
+        $$v_q^* = v_{q,grid} - \omega L i_d + k_p(i_q^* - i_q) + k_i \int(i_q^* - i_q)dt$$
+
+        <p>
+          The decoupling terms ($\omega L i$) ensure independent control of active and reactive power.
+        </p>
+      </section>
+
+      <section class="proj-section" id="filter-analysis">
+        <h2>LCL Filter Analysis</h2>
+        <p>
+          To meet grid codes for Total Harmonic Distortion (THD), an LCL filter was designed instead of a standard L-filter. This provides superior attenuation of switching frequencies ($-60\ \text{dB/decade}$ past the resonant frequency) with a smaller overall footprint.
+        </p>
+
+        <h3>Resonant Frequency Calculation</h3>
+        <p>
+          The resonant frequency $f_{res}$ must be carefully placed between the fundamental grid frequency ($f_g$) and the switching frequency ($f_{sw}$) to avoid resonance excitation:
+        </p>
+
+        $$10 f_g < f_{res} < 0.5 f_{sw}$$
+
+        <p>The resonant frequency is governed by the inverter-side inductor ($L_i$), grid-side inductor ($L_g$), and the filter capacitor ($C_f$):</p>
+
+        $$f_{res} = \frac{1}{2\pi} \sqrt{\frac{L_g + L_i}{L_g L_i C_f}}$$
+
+        <h3>Transfer Function</h3>
+        <p>
+          Neglecting parasitic resistances for the worst-case undamped analysis, the control-to-output transfer function $G(s)$ representing the filter attenuation is:
+        </p>
+
+        $$G(s) = \frac{i_{grid}(s)}{v_{inv}(s)} = \frac{1}{s^3 L_i L_g C_f + s(L_i + L_g)}$$
+      </section>
+
+      <section class="proj-section">
+        <h2>Simulation Results</h2>
+        <p>The system was built and analyzed within MATLAB/Simulink. The Bode plot below demonstrates the successful placement of the resonant peak and the sharp harmonic roll-off.</p>
+
+        <figure class="proj-figure">
+          <img src="../assets/projects/grid-inverter/system-architecture.png"
+               alt="Simulink System Architecture" />
+          <figcaption>Fig. 1 — Top-level Simulink architecture showing the grid, LCL filter, inverter bridge, and dq-control subsystem.</figcaption>
+        </figure>
+
+        <figure class="proj-figure">
+          <img src="../assets/projects/grid-inverter/lcl-bode.png"
+               alt="MATLAB Bode Plot of LCL Filter" />
+          <figcaption>Fig. 2 — Frequency response analysis of the LCL filter, verifying the attenuation requirements.</figcaption>
+        </figure>
+      </section>
+
+      <section class="proj-section">
+        <h2>Key Results</h2>
+        <div class="results-grid">
+          <div class="result-card">
+            <span class="result-val">&lt; 5%</span>
+            <span class="result-label">Grid Current THD</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">1.0</span>
+            <span class="result-label">Power Factor</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">Robust</span>
+            <span class="result-label">Grid Sync (PLL)</span>
+          </div>
+          <div class="result-card">
+            <span class="result-val">-60 dB/dec</span>
+            <span class="result-label">High-Freq Attenuation</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="proj-section">
+        <h2>Files & Code</h2>
+        <div class="file-list">
+          <a href="https://github.com/Sandaru-PowerEl/grid-inverter" class="file-item" target="_blank">
+            <span class="file-icon">⚙️</span>
+            <span class="file-name">grid_inverter.slx</span>
+            <span class="file-desc">Simulink model file</span>
+          </a>
+          <a href="https://github.com/Sandaru-PowerEl/grid-inverter" class="file-item" target="_blank">
+            <span class="file-icon">📄</span>
+            <span class="file-name">filter_design.m</span>
+            <span class="file-desc">MATLAB script for component sizing and Bode plots</span>
+          </a>
+        </div>
+      </section>
+
+    </div><aside class="proj-sidebar">
+    <div class="sidebar-card">
+      <h4>Project Info</h4>
+      <dl>
+        <dt>Category</dt><dd>Power Systems</dd>
+        <dt>Tools</dt><dd>MATLAB, Simulink</dd>
+        <dt>Status</dt><dd><span class="badge-complete">Complete</span></dd>
+        <dt>Year</dt><dd>2026</dd>
+      </dl>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Topics Covered</h4>
+      <ul class="topic-list">
+        <li>LCL Filter Design</li>
+        <li>DQ Reference Frame</li>
+        <li>Cascade PI Control</li>
+        <li>Phase-Locked Loop (PLL)</li>
+        <li>Harmonic Attenuation</li>
+        <li>EV Charging Architectures</li>
+      </ul>
+    </div>
+
+    <a href="https://github.com/Sandaru-PowerEl/grid-inverter" class="btn-primary block-btn" target="_blank">View on GitHub ↗</a>
+  </aside>
+
+  </div></article>
+
+<div class="next-project">
+  <div class="container">
+    <span class="section-label">// next</span>
+    <a href="ac-thermal-control.html" class="next-link">
+      Air-Conditioning Thermal Control Analysis →
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-name">Sandaru Imesh</span>
+      <span class="footer-sep">·</span>
+      <span class="footer-uni">University of Moratuwa · EE</span>
+      <div class="footer-links">
+        <a href="https://github.com/Sandaru-PowerEl" target="_blank">GitHub</a>
+        <a href="mailto:sandarukaviraj31@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

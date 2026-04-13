@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Detail | Sandaru</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'],['\\(','\\)']],
+        displayMath: [['$$','$$'],['\\[','\\]']],
+        packages: {'[+]': ['ams']}
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">S.I.</a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../projects.html" class="active">Projects</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="https://github.com/Sandaru-PowerEl" target="_blank" class="nav-gh">GitHub ↗</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- ─── PROJECT HEADER ─── -->
+  <div class="proj-header">
+    <div class="container">
+      <a href="../projects.html" class="back-link">← Back to Projects</a>
+      <div class="proj-meta-top">
+        <span class="proj-category">Power Electronics</span>
+        <span class="proj-date">2024</span>
+      </div>
+      <h1 class="proj-title">Closed-Loop Buck Converter<br/>with PI Control</h1>
+      <p class="proj-subtitle">
+        Complete design from state-space averaging through small-signal linearisation,
+        transfer function derivation, and digital PI implementation verified in QSpice.
+      </p>
+      <div class="proj-tags-row">
+        <span class="tag">Buck Converter</span>
+        <span class="tag">State-Space</span>
+        <span class="tag">PI Control</span>
+        <span class="tag">QSpice</span>
+        <span class="tag">MATLAB</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Sandaru-PowerEl/buck-converter-pi" class="btn-primary" target="_blank">View on GitHub ↗</a>
+        <a href="#derivation" class="btn-ghost">Jump to Derivation</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COVER IMAGE / VIDEO ─── -->
+  <div class="proj-media">
+    <div class="container">
+      <!-- Replace src with your actual image path -->
+      <img src="../assets/projects/buck-converter/cover.png"
+           alt="Buck converter QSpice simulation output"
+           class="proj-cover-img" />
+      <!-- For VIDEO: replace <img> above with:
+      <video controls class="proj-cover-img">
+        <source src="../assets/projects/buck-converter/demo.mp4" type="video/mp4" />
+      </video>
+      -->
+    </div>
+  </div>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <article class="proj-content">
+    <div class="container proj-layout">
+
+      <!-- Left: main write-up -->
+      <div class="proj-body">
+
+        <section class="proj-section">
+          <h2>Overview</h2>
+          <p>
+            This project implements a fully closed-loop synchronous buck converter.
+            The converter steps 12 V down to 5 V at 2 A load. Control is achieved
+            with a discrete-time PI controller designed via the Tustin (bilinear)
+            transform, and verified through transient simulation in QSpice.
+          </p>
+        </section>
+
+        <section class="proj-section" id="derivation">
+          <h2>Mathematical Derivation</h2>
+
+          <h3>1. Circuit Parameters</h3>
+          <p>The nominal operating parameters are:</p>
+          <ul>
+            <li>Input voltage: $V_{in} = 12\ \text{V}$</li>
+            <li>Output voltage: $V_{out} = 5\ \text{V}$</li>
+            <li>Switching frequency: $f_s = 100\ \text{kHz}$</li>
+            <li>Inductance: $L = 47\ \mu\text{H}$</li>
+            <li>Capacitance: $C = 100\ \mu\text{F}$</li>
+            <li>Load resistance: $R = 2.5\ \Omega$</li>
+          </ul>
+
+          <h3>2. State-Space Averaging</h3>
+          <p>
+            Applying state-space averaging over one switching period, the
+            averaged state equations in continuous conduction mode (CCM) are:
+          </p>
+
+          $$\dot{\mathbf{x}} = A\,\mathbf{x} + B\,u$$
+
+          <p>where $\mathbf{x} = [i_L,\ v_C]^T$, $u = V_{in}$, and the matrices are:</p>
+
+          $$A = \begin{bmatrix} 0 & -\tfrac{1}{L} \\[4pt] \tfrac{1}{C} & -\tfrac{1}{RC} \end{bmatrix},
+          \quad
+          B = \begin{bmatrix} \tfrac{D}{L} \\[4pt] 0 \end{bmatrix}$$
+
+          <p>The steady-state duty cycle is $D = V_{out}/V_{in} = 5/12 \approx 0.417$.</p>
+
+          <h3>3. Small-Signal Linearisation</h3>
+          <p>
+            Perturbing around the operating point
+            $(\hat{i}_L,\, \hat{v}_C,\, \hat{d})$:
+          </p>
+
+          $$\dot{\hat{\mathbf{x}}} = A\,\hat{\mathbf{x}} + B_d\,\hat{d}$$
+
+          $$B_d = \begin{bmatrix} V_{in}/L \\ 0 \end{bmatrix}$$
+
+          <h3>4. Control-to-Output Transfer Function</h3>
+          <p>Taking the Laplace transform with output $\hat{v}_C$:</p>
+
+          $$G_{vd}(s) = \frac{\hat{v}_C(s)}{\hat{d}(s)} = \frac{V_{in}}{LC} \cdot \frac{1}{s^2 + \dfrac{s}{RC} + \dfrac{1}{LC}}$$
+
+          <p>Substituting values:</p>
+
+          $$\omega_n = \frac{1}{\sqrt{LC}} = \frac{1}{\sqrt{47\times10^{-6}\cdot 100\times10^{-6}}} \approx 14{,}590\ \text{rad/s}$$
+
+          $$Q = R\sqrt{\frac{C}{L}} = 2.5\sqrt{\frac{100\times10^{-6}}{47\times10^{-6}}} \approx 3.65$$
+
+          <h3>5. PI Controller Design</h3>
+          <p>
+            The continuous-time PI controller is:
+          </p>
+
+          $$C(s) = K_p + \frac{K_i}{s} = K_p\,\frac{s + z_c}{s}$$
+
+          <p>
+            The zero $z_c = K_i/K_p$ is placed at one decade below the plant's
+            resonant frequency: $z_c = \omega_n / 10 \approx 1{,}459\ \text{rad/s}$.
+            The proportional gain $K_p$ is chosen to achieve a crossover frequency
+            of $f_c = 5\ \text{kHz}$ with at least $45°$ phase margin.
+          </p>
+
+          <h3>6. Discrete-Time Implementation (Tustin Transform)</h3>
+          <p>
+            With sampling period $T_s = 1/f_s = 10\ \mu\text{s}$, the
+            bilinear (Tustin) approximation $s \approx \dfrac{2}{T_s}\cdot\dfrac{z-1}{z+1}$
+            yields the discrete controller:
+          </p>
+
+          $$C(z) = \frac{(K_p + K_i\,T_s/2)\,z + (K_i\,T_s/2 - K_p)}{z - 1}$$
+
+          <p>
+            This is implemented in the QSpice behavioural source using the
+            <code>idt()</code> integrator primitive.
+          </p>
+        </section>
+
+        <!-- ─── IMAGES / FIGURES ─── -->
+        <section class="proj-section">
+          <h2>Simulation Results</h2>
+          <p>The following figures show the transient response to a 50% load step.</p>
+
+          <figure class="proj-figure">
+            <!-- Replace with your actual image -->
+            <img src="../assets/projects/buck-converter/step-response.png"
+                 alt="Output voltage step response" />
+            <figcaption>Fig. 1 — Output voltage step response (0 → 2 A at t = 2 ms). Rise time ≈ 80 µs, overshoot &lt; 3%.</figcaption>
+          </figure>
+
+          <figure class="proj-figure">
+            <img src="../assets/projects/buck-converter/bode-plot.png"
+                 alt="Open-loop Bode plot" />
+            <figcaption>Fig. 2 — Open-loop Bode plot showing crossover at 5 kHz with 47° phase margin.</figcaption>
+          </figure>
+        </section>
+
+        <!-- ─── VIDEO SECTION (optional) ─── -->
+        <!--
+        <section class="proj-section">
+          <h2>Demo Video</h2>
+          <div class="proj-video-wrap">
+            <video controls>
+              <source src="../assets/projects/buck-converter/demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </section>
+        -->
+
+        <section class="proj-section">
+          <h2>Key Results</h2>
+          <div class="results-grid">
+            <div class="result-card">
+              <span class="result-val">47°</span>
+              <span class="result-label">Phase Margin</span>
+            </div>
+            <div class="result-card">
+              <span class="result-val">80 µs</span>
+              <span class="result-label">Rise Time</span>
+            </div>
+            <div class="result-card">
+              <span class="result-val">&lt;3%</span>
+              <span class="result-label">Overshoot</span>
+            </div>
+            <div class="result-card">
+              <span class="result-val">5 kHz</span>
+              <span class="result-label">Crossover Freq.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── HANDWRITTEN DERIVATION ─── -->
+        <section class="proj-section" id="handwritten">
+          <h2>Handwritten Derivation</h2>
+          <p>Original working — scanned directly from notebook. State-space averaging through to the final discrete-time controller coefficients.</p>
+
+          <div class="derivation-pages">
+            <figure class="proj-figure derivation-page">
+              <img src="../assets/projects/buck-converter/derivation-p1.jpg"
+                   alt="Handwritten derivation page 1 — state equations and averaging"
+                   loading="lazy" />
+              <figcaption>Page 1 — State equations &amp; averaging (CCM)</figcaption>
+            </figure>
+            <figure class="proj-figure derivation-page">
+              <img src="../assets/projects/buck-converter/derivation-p2.jpg"
+                   alt="Handwritten derivation page 2 — small-signal model"
+                   loading="lazy" />
+              <figcaption>Page 2 — Small-signal linearisation &amp; G_vd(s)</figcaption>
+            </figure>
+            <figure class="proj-figure derivation-page">
+              <img src="../assets/projects/buck-converter/derivation-p3.jpg"
+                   alt="Handwritten derivation page 3 — PI design and Tustin"
+                   loading="lazy" />
+              <figcaption>Page 3 — PI controller design &amp; Tustin transform</figcaption>
+            </figure>
+          </div>
+
+          <a href="../assets/projects/buck-converter/derivation-full.pdf"
+             class="btn-ghost derivation-dl" target="_blank">
+            ↓ Download full derivation (PDF)
+          </a>
+        </section>
+
+        <section class="proj-section">
+          <h2>Files & Code</h2>
+          <div class="file-list">
+            <a href="https://github.com/Sandaru-PowerEl/buck-converter-pi/blob/main/buck_pi.asc" class="file-item" target="_blank">
+              <span class="file-icon">📄</span>
+              <span class="file-name">buck_pi.asc</span>
+              <span class="file-desc">QSpice schematic</span>
+            </a>
+            <a href="https://github.com/Sandaru-PowerEl/buck-converter-pi/blob/main/analysis.m" class="file-item" target="_blank">
+              <span class="file-icon">📄</span>
+              <span class="file-name">analysis.m</span>
+              <span class="file-desc">MATLAB — Bode plots, transfer function</span>
+            </a>
+            <a href="https://github.com/Sandaru-PowerEl/buck-converter-pi/blob/main/derivation.pdf" class="file-item" target="_blank">
+              <span class="file-icon">📑</span>
+              <span class="file-name">derivation.pdf</span>
+              <span class="file-desc">Full hand-written derivation (PDF)</span>
+            </a>
+          </div>
+        </section>
+
+      </div><!-- /.proj-body -->
+
+      <!-- Right: sidebar -->
+      <aside class="proj-sidebar">
+        <div class="sidebar-card">
+          <h4>Project Info</h4>
+          <dl>
+            <dt>Category</dt><dd>Power Electronics</dd>
+            <dt>Tools</dt><dd>QSpice, MATLAB</dd>
+            <dt>Status</dt><dd><span class="badge-complete">Complete</span></dd>
+            <dt>Year</dt><dd>2024</dd>
+          </dl>
+        </div>
+
+        <div class="sidebar-card">
+          <h4>Topics Covered</h4>
+          <ul class="topic-list">
+            <li>State-Space Averaging</li>
+            <li>Small-Signal Linearisation</li>
+            <li>Transfer Function Derivation</li>
+            <li>Routh–Hurwitz Stability</li>
+            <li>Tustin Transform (Digital)</li>
+            <li>QSpice Simulation</li>
+          </ul>
+        </div>
+
+        <a href="https://github.com/Sandaru-PowerEl/buck-converter-pi" class="btn-primary block-btn" target="_blank">View on GitHub ↗</a>
+      </aside>
+
+    </div><!-- /.proj-layout -->
+  </article>
+
+  <!-- ─── NEXT PROJECT ─── -->
+  <div class="next-project">
+    <div class="container">
+      <span class="section-label">// next</span>
+      <a href="grid-inverter.html" class="next-link">
+        Grid-Connected Inverter with Battery Charging →
+      </a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Sandaru Dissanayake</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-uni">University of Moratuwa · EE</span>
+        <div class="footer-links">
+          <a href="https://github.com/Sandaru-PowerEl" target="_blank">GitHub</a>
+          <a href="mailto:sandarukaviraj31@gmail.com">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── LIGHTBOX ─── -->
+  <div class="deriv-lightbox" id="lightbox">
+    <button class="deriv-lightbox-close" id="lightboxClose">✕ close</button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.querySelector('.nav-links').classList.toggle('open');
+    });
+
+    // Lightbox for derivation pages
+    const lightbox   = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    document.querySelectorAll('.derivation-page img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
