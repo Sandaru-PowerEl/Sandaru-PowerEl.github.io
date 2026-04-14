@@ -130,6 +130,20 @@ ul { list-style: none; }
   border-bottom: 1px solid var(--border);
 }
 
+
+/* Styling for the avatar on the home page */
+.hero-avatar {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 1.5rem;
+  border-width: 3px; /* Slightly thinner border for a smaller image */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -804,6 +818,46 @@ ul { list-style: none; }
   margin-bottom: 1.25rem;
 }
 
+/* Personalized About Section */
+.about-section {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--amber);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  color: var(--text-1);
+  border-bottom: none; /* overrides general about-main h2 border */
+  padding-bottom: 0;
+}
+
+.about-text p {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
 .about-main h2 {
   font-size: 1.15rem;
   font-weight: 600;
@@ -984,4 +1038,15 @@ code {
   .hero-content { padding: 4rem 1.5rem 3rem; }
   .project-grid { grid-template-columns: 1fr; }
   .file-desc { display: none; }
+
+  /* Mobile styling for the About Section */
+  .about-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .profile-img {
+    width: 150px;
+    height: 150px;
+  }
 }
